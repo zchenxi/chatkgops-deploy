@@ -1,0 +1,59 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: OpenTelemetryCollector
+metadata:
+  name: otel-daemonset
+spec:
+  mode: daemonset
+  hostNetwork: true
+  config: |
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+          http:
+    processors:
+      batch:
+      filter/1:
+        spans:
+          exclude:
+            match_type: strict
+            attributes:
+              - Key: thread.name
+                Value: Nacos-Watch-Task-Scheduler-1
+    exporters:
+      otlp:
+        endpoint: "http://tempo:4317"
+        tls:
+          insecure: true
+      file/traces:
+        path: /data/trace/trace.json
+        rotation:
+          max_megabytes: 1024
+          max_days: 30
+          localtime: true
+      file/logs:
+        path: /data/log/log.json
+        rotation:
+          max_megabytes: 1024
+          max_days: 30
+          localtime: true
+      file/metrics:
+        path: /data/metrics/metrics.json
+        rotation:
+          max_megabytes: 1024
+          max_days: 30
+          localtime: true
+    service:
+      pipelines:
+        traces:
+          receivers: [otlp]
+          processors: [filter/1,batch]
+          exporters: [otlp,file/traces]
+        metrics:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [file/metrics]
+        logs:
+          receivers: [otlp]
+          processors: [batch]
+          exporters: [file/logs]
