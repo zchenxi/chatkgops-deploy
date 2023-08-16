@@ -1,7 +1,5 @@
 # Loki-Stack Helm Chart
 
-This `loki-stack` Helm chart is a community maintained chart.
-
 ## Prerequisites
 
 Make sure you have Helm [installed](https://helm.sh/docs/using_helm/#installing-helm).
