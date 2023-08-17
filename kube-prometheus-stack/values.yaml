@@ -1011,6 +1011,16 @@ grafana:
       url: http://tempo.obs.svc.cluster.local:3100
       access: proxy
       version: 1
+    - name: 'Tempo-Query' # tempo-query is required for 7.4.x Grafana and before
+      type: tempo
+      access: proxy
+      orgId: 1
+      url: http://tempo.obs.svc.cluster.local:16686
+      basicAuth: false
+      version: 1
+      editable: false
+      apiVersion: 1
+      uid: tempo-query
   # - name: prometheus-sample
   #   access: proxy
   #   basicAuth: true
