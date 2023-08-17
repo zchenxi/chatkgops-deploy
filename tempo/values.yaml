@@ -163,7 +163,7 @@ tempoQuery:
   #   - myRegistryKeySecretName
 
   # -- if False the tempo-query container is not deployed
-  enabled: false
+  enabled: true
 
   service:
     port: 16686
