@@ -4,7 +4,7 @@ metadata:
     name: tt-instrumentation
 spec:
   exporter:
-    endpoint: http://otel-daemonset-collector.obs.svc.cluster.local:4317
+    endpoint: http://otelcol-opentelemetry-collector.obs.svc.cluster.local:4317
   propagators:
     - tracecontext
     - baggage
