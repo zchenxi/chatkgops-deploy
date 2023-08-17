@@ -6,7 +6,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 # Valid values are "daemonset", "deployment", and "statefulset".
-mode: ""
+mode: "deployment"
 
 # Handles basic configuration of components that
 # also require k8s modifications to work correctly.
@@ -72,6 +72,14 @@ configMap:
 config:
   exporters:
     logging: {}
+    otlp:
+      endpoint: "http://tempo.obs.svc.cluster.local:4317"
+      tls:
+        insecure: true
+    prometheusremotewrite:
+      endpoint: "http://prometheus-kube-prometheus-prometheus.obs.svc.cluster.local:9090/api/v1/write"
+      tls:
+        insecure: true
   extensions:
     # The health_check extension is mandatory for this chart.
     # Without the health_check extension the collector will fail the readiness and liveliness probes.
@@ -82,66 +90,40 @@ config:
     batch: {}
     # If set to null, will be overridden with values based on k8s resource limits
     memory_limiter: null
+    filter/1:
+      spans:
+        exclude:
+          match_type: strict
+          attributes:
+            - key: thread.name
+              value: Nacos-Watch-Task-Scheduler-1
   receivers:
-    jaeger:
-      protocols:
-        grpc:
-          endpoint: ${env:MY_POD_IP}:14250
-        thrift_http:
-          endpoint: ${env:MY_POD_IP}:14268
-        thrift_compact:
-          endpoint: ${env:MY_POD_IP}:6831
     otlp:
       protocols:
         grpc:
           endpoint: ${env:MY_POD_IP}:4317
         http:
           endpoint: ${env:MY_POD_IP}:4318
-    prometheus:
-      config:
-        scrape_configs:
-          - job_name: opentelemetry-collector
-            scrape_interval: 10s
-            static_configs:
-              - targets:
-                  - ${env:MY_POD_IP}:8888
-    zipkin:
-      endpoint: ${env:MY_POD_IP}:9411
   service:
-    telemetry:
-      metrics:
-        address: ${env:MY_POD_IP}:8888
     extensions:
       - health_check
       - memory_ballast
     pipelines:
-      logs:
-        exporters:
-          - logging
-        processors:
-          - memory_limiter
-          - batch
-        receivers:
-          - otlp
       metrics:
         exporters:
-          - logging
+          - prometheusremotewrite
         processors:
-          - memory_limiter
           - batch
         receivers:
           - otlp
-          - prometheus
       traces:
         exporters:
-          - logging
+          - otlp
         processors:
-          - memory_limiter
+          - filter/1
           - batch
         receivers:
           - otlp
-          - jaeger
-          - zipkin
 
 image:
   # If you want to use the core image `otel/opentelemetry-collector`, you also need to change `command.name` value to `otelcol`.
@@ -234,37 +216,6 @@ ports:
     servicePort: 4318
     hostPort: 4318
     protocol: TCP
-  jaeger-compact:
-    enabled: true
-    containerPort: 6831
-    servicePort: 6831
-    hostPort: 6831
-    protocol: UDP
-  jaeger-thrift:
-    enabled: true
-    containerPort: 14268
-    servicePort: 14268
-    hostPort: 14268
-    protocol: TCP
-  jaeger-grpc:
-    enabled: true
-    containerPort: 14250
-    servicePort: 14250
-    hostPort: 14250
-    protocol: TCP
-  zipkin:
-    enabled: true
-    containerPort: 9411
-    servicePort: 9411
-    hostPort: 9411
-    protocol: TCP
-  metrics:
-    # The metrics port is disabled by default. However you need to enable the port
-    # in order to use the ServiceMonitor (serviceMonitor.enabled) or PodMonitor (podMonitor.enabled).
-    enabled: false
-    containerPort: 8888
-    servicePort: 8888
-    protocol: TCP
 
 # Resource limits & requests. Update according to your own use case as these values might be too low for a typical deployment.
 resources: {}
@@ -287,7 +238,7 @@ dnsPolicy: ""
 dnsConfig: {}
 
 # only used with deployment mode
-replicaCount: 1
+replicaCount: 6
 
 # only used with deployment mode
 revisionHistoryLimit: 10
