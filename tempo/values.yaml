@@ -242,9 +242,10 @@ serviceAccount:
   automountServiceAccountToken: true
 
 service:
-  type: ClusterIP
+  type: NodePort
   annotations: {}
   labels: {}
+  nodePort: 30003
 
 serviceMonitor:
   enabled: false

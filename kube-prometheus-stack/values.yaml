@@ -1038,6 +1038,8 @@ grafana:
   ##
   service:
     portName: http-web
+    type: NodePort
+    nodePort: 30000
 
   serviceMonitor:
     # If true, a ServiceMonitor CRD is created for a prometheus operator
@@ -2590,7 +2592,7 @@ prometheus:
     ## Port to expose on each node
     ## Only used if service.type is 'NodePort'
     ##
-    nodePort: 30090
+    nodePort: 30002
 
     ## Loadbalancer IP
     ## Only use if service.type is "LoadBalancer"
@@ -2603,7 +2605,7 @@ prometheus:
 
     ## Service type
     ##
-    type: ClusterIP
+    type: NodePort
 
     ## Additional port to define in the Service
     additionalPorts: []

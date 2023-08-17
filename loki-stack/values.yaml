@@ -19,6 +19,9 @@ loki:
   datasource:
     jsonData: {}
     uid: ""
+  service:
+    type: NodePort
+    nodePort: 30001
 
 
 promtail:
