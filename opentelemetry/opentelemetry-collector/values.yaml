@@ -97,6 +97,15 @@ config:
           attributes:
             - key: thread.name
               value: Nacos-Watch-Task-Scheduler-1
+    filter/2:
+      spans:
+        exclude:
+          match_type: strict
+          resources:
+            - key: service.name
+              value: jaeger-query
+            - key: service.name
+              value: tempo-grpc-plugin
   receivers:
     otlp:
       protocols:
@@ -121,6 +130,7 @@ config:
           - otlp
         processors:
           - filter/1
+          - filter/2
           - batch
         receivers:
           - otlp
