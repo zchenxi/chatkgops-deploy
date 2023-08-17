@@ -1,5 +1,5 @@
 # chatops-deploy
-
+### deploy
 ```
 kubectl apply -f ./opentelemetry/cert-manager.yaml
 (or kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.12.0/cert-manager.yaml)
@@ -16,5 +16,10 @@ helm install prometheus ./kube-prometheus-stack -n obs
 
 cd ts-deploy
 make deploy
-
+```
+### grafana datasources
+```
+http://prometheus-kube-prometheus-prometheus:9090
+http://loki:3100
+http://tempo:3100
 ```
