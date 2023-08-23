@@ -22,6 +22,14 @@ loki:
   service:
     type: NodePort
     nodePort: 30001
+  extraVolumeMounts:
+    - name: timezone
+      mountPath: /etc/localtime
+      readOnly: true
+  extraVolumes :
+    - name: timezone
+      hostPath:
+        path: /usr/share/zoneinfo/Asia/Shanghai
 
 
 promtail:
@@ -36,6 +44,9 @@ promtail:
     - name: pods
       hostPath:
         path: /var/log/pods
+    - name: timezone
+      hostPath:
+        path: /usr/share/zoneinfo/Asia/Shanghai
   defaultVolumeMounts:
     - name: run
       mountPath: /run/promtail
@@ -44,6 +55,9 @@ promtail:
       readOnly: true
     - name: pods
       mountPath: /var/log/pods
+      readOnly: true
+    - name: timezone
+      mountPath: /etc/localtime
       readOnly: true
   config:
     logLevel: info

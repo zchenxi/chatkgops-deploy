@@ -99,7 +99,10 @@ tempo:
   # -- Environment variables from secrets or configmaps to add to the ingester pods
   extraEnvFrom: []
   # -- Volume mounts to add
-  extraVolumeMounts: []
+  extraVolumeMounts:
+    - name: timezone
+      mountPath: /etc/localtime
+      readOnly: true
   # - name: extra-volume
   #   mountPath: /mnt/volume
   #   readOnly: true
@@ -208,7 +211,10 @@ tempoQuery:
   # -- Environment variables to add
   extraEnv: []
   # -- Volume mounts to add
-  extraVolumeMounts: []
+  extraVolumeMounts:
+    - name: timezone
+      mountPath: /etc/localtime
+      readOnly: true
   # - name: extra-volume
   #   mountPath: /mnt/volume
   #   readOnly: true
@@ -268,7 +274,10 @@ podAnnotations: {}
 podLabels: {}
 
 # -- Volumes to add
-extraVolumes: []
+extraVolumes:
+  - name: timezone
+    hostPath:
+      path: /usr/share/zoneinfo/Asia/Shanghai
 
 # -- Node labels for pod assignment. See: https://kubernetes.io/docs/user-guide/node-selection/
 nodeSelector: {}
