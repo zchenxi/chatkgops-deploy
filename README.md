@@ -31,3 +31,9 @@ prometheus: 30002
 tempo: 30003
 trainticket: 32677
 ```
+### Upgrade
+```
+helm upgrade tempo ./tempo -n obs
+helm upgrade loki ./loki-stack -n obs
+helm upgrade prometheus ./kube-prometheus-stack -n obs
+```
