@@ -25,7 +25,6 @@ http://tempo:3100
 ```
 ### Port
 ```
-grafana: 30000
 loki: 30001
 prometheus: 30002
 tempo: 30003
