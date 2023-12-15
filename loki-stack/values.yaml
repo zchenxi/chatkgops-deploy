@@ -34,31 +34,6 @@ loki:
 
 promtail:
   enabled: true
-  defaultVolumes:
-    - name: run
-      hostPath:
-        path: /run/promtail
-    - name: containers
-      hostPath:
-        path: /home/docker/containers
-    - name: pods
-      hostPath:
-        path: /var/log/pods
-    - name: timezone
-      hostPath:
-        path: /usr/share/zoneinfo/Asia/Shanghai
-  defaultVolumeMounts:
-    - name: run
-      mountPath: /run/promtail
-    - name: containers
-      mountPath: /home/docker/containers
-      readOnly: true
-    - name: pods
-      mountPath: /var/log/pods
-      readOnly: true
-    - name: timezone
-      mountPath: /etc/localtime
-      readOnly: true
   config:
     logLevel: info
     serverPort: 3101
