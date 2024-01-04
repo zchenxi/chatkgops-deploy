@@ -748,3 +748,21 @@ neo4j://10.176.122.154:7687
 初始用户名：neo4j
 
 初始密码：neo4j   (-> chatkgops)
+
+## 9. Chromadb
+
+https://docs.trychroma.com/deployment
+
+## 10. ES
+
+```
+docker run -d --name es --net elastic -p 9200:9200 -p 9300:9300 -v /root/es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml -m 3GB docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+```
+
+`/root/es/elasticsearch.yml`
+
+```
+xpack.security.enabled: false
+http.host: 0.0.0.0
+```
+
