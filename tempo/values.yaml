@@ -47,7 +47,7 @@ tempo:
   querier: {}
   # -- Configuration options for the query-fronted
   queryFrontend: {}
-  retention: 24h
+  retention: 240h
   # Global overrides
   global_overrides:
     per_tenant_override_config: /conf/overrides.yaml
