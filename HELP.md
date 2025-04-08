@@ -692,6 +692,7 @@ Tempo: http://10.176.122.154:30003
 Clear (`otelcol`不需要删除)
 
 ```bash
+cd ts-deploy
 make reset-deploy
 helm uninstall tsdb
 helm uninstall prometheus -n obs
@@ -705,6 +706,7 @@ Reinstall
 helm install tempo ./tempo -n obs
 helm install loki ./loki-stack -n obs
 helm install prometheus ./kube-prometheus-stack -n obs
+cd ts-deploy
 make deploy
 ```
 
